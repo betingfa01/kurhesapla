@@ -69,7 +69,10 @@ self.addEventListener("fetch", (event) => {
         .then((res) => {
           if (res && res.ok) {
             const copy = res.clone();
-            caches.open(CACHE).then((cache) => cache.put(req, copy));
+            // waitUntil: without this, the browser can terminate the service
+            // worker right after respondWith() settles, aborting this
+            // background cache write before it finishes (cache never repaired).
+            event.waitUntil(caches.open(CACHE).then((cache) => cache.put(req, copy)));
           }
           return res;
         })
