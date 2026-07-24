@@ -74,7 +74,18 @@
   function paint() { calc(); }
 
   U.forEach(function (x) {
-    E[x].onfocus = function () { active = x; };
+    E[x].onfocus = function () {
+      active = x;
+      // iOS/Safari places the caret at the start of the value by default
+      // when a field is focused (especially via the keyboard's prev/next
+      // toolbar), instead of at the end where typing should continue.
+      // Move it to the end explicitly, after focus finishes settling.
+      var el = E[x];
+      setTimeout(function () {
+        var len = el.value.length;
+        try { el.setSelectionRange(len, len); } catch (e) { /* not supported: no-op */ }
+      }, 0);
+    };
     E[x].oninput = function () { active = x; calc(); };
   });
 

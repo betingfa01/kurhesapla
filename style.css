@@ -19,7 +19,7 @@ h1{text-align:center;font-size:25px;margin:8px 0 18px}
 .coinname{display:flex;align-items:center;gap:9px}
 .coinlogo{width:27px;height:27px;flex:none}
 .sub{font-size:10px;color:#8993a2;margin-top:3px}
-input{width:130px;background:#0b0c0e;color:#fff;border:1px solid #3b4450;border-radius:10px;padding:10px;text-align:right;direction:rtl;font-size:16px;outline:0;-webkit-appearance:none;appearance:none}
+input{width:130px;background:#0b0c0e;color:#fff;border:1px solid #3b4450;border-radius:10px;padding:10px;text-align:right;font-size:16px;outline:0;-webkit-appearance:none;appearance:none}
 input:focus{border-color:#a4fd31}
 button{width:100%;margin-top:14px;background:#a4fd31;color:#071000;border:0;border-radius:14px;padding:15px;font-weight:900;-webkit-appearance:none;appearance:none;touch-action:manipulation;cursor:pointer}
 button:disabled{opacity:.7}
