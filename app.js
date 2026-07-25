@@ -73,7 +73,15 @@
   // --- calculation (unchanged) ---------------------------------------
   function calc() {
     var a = n(E[active].value);
-    if (!isFinite(a)) return;
+    if (!isFinite(a)) {
+      // Active field is empty/invalid (e.g. just cleared) - clear every
+      // other field too instead of leaving stale converted amounts.
+      U.forEach(function (x) {
+        if (x !== active) E[x].value = "";
+        sizeInput(x);
+      });
+      return;
+    }
     var usd =
       active === "USD" ? a :
       active === "EUR" ? a / R.EUR :
