@@ -5,7 +5,7 @@
  * cross-origin rate APIs (never cache stale financial data, and avoid
  * Safari's known quirks around intercepting cross-origin fetches).
  */
-const CACHE = "fa01-v6";
+const CACHE = "fa01-v7";
 const ASSETS = [
   "./",
   "./index.html",
@@ -13,7 +13,6 @@ const ASSETS = [
   "./app.js",
   "./manifest.json",
   "./logo.jpeg",
-  "./icons/flag-eu.png",
   "./icons/icon-16.png",
   "./icons/icon-32.png",
   "./icons/icon-72.png",
