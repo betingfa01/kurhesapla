@@ -99,16 +99,31 @@
     el.onfocus = function () {
       active = x;
       freshFocus[x] = true;
-      // Runs after the browser's own focus/selection handling settles.
+      // Covers focus gained via Tab/programmatically (no mousedown/touch).
+      caretToEnd(x);
       setTimeout(function () { caretToEnd(x); }, 0);
     };
     el.oninput = function () {
       active = x;
       calc();
+      caretToEnd(x);
       setTimeout(function () { caretToEnd(x); }, 0);
     };
-    el.addEventListener("click", function () {
+    // Stop the browser from placing the caret at the tapped/clicked
+    // position: take over the click entirely and force focus + caret to
+    // the end instead. This is what previously let the caret land at the
+    // start of the value on some browsers.
+    el.addEventListener("mousedown", function (e) {
+      e.preventDefault();
+      el.focus();
+      caretToEnd(x);
       setTimeout(function () { caretToEnd(x); }, 0);
+    });
+    el.addEventListener("touchend", function () {
+      setTimeout(function () {
+        el.focus();
+        caretToEnd(x);
+      }, 0);
     });
     // beforeinput (not keydown) so this works reliably with virtual/mobile
     // keyboards too. First Backspace/Delete right after focusing clears the

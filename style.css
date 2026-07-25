@@ -19,7 +19,12 @@ h1{text-align:center;font-size:25px;margin:8px 0 18px}
 .coinname{display:flex;align-items:center;gap:9px}
 .coinlogo{width:27px;height:27px;flex:none}
 .sub{font-size:10px;color:#8993a2;margin-top:3px}
-input{width:130px;background:#0b0c0e;color:#fff;border:1px solid #3b4450;border-radius:10px;padding:10px;text-align:right;direction:rtl;font-size:16px;outline:0;-webkit-appearance:none;appearance:none}
+/* direction was rtl before; switched to ltr because it made Safari place
+   the caret at the visual start instead of the end for pure-digit values
+   (bidi quirk). Caret-to-end is now handled explicitly in app.js, so ltr
+   + text-align:right renders identically for numeric content but fixes
+   the caret bug. */
+input{width:130px;background:#0b0c0e;color:#fff;border:1px solid #3b4450;border-radius:10px;padding:10px;text-align:right;direction:ltr;font-size:16px;outline:0;-webkit-appearance:none;appearance:none}
 input:focus{border-color:#a4fd31}
 /* Fixed, non-editable currency symbol prefix (USD/EUR/TRY only) - same
    visual box as the plain input above, symbol kept snug against the
