@@ -21,6 +21,14 @@ h1{text-align:center;font-size:25px;margin:8px 0 18px}
 .sub{font-size:10px;color:#8993a2;margin-top:3px}
 input{width:130px;background:#0b0c0e;color:#fff;border:1px solid #3b4450;border-radius:10px;padding:10px;text-align:right;direction:rtl;font-size:16px;outline:0;-webkit-appearance:none;appearance:none}
 input:focus{border-color:#a4fd31}
+/* Fixed, non-editable currency symbol prefix (USD/EUR/TRY only) - same
+   visual box as the plain input above, symbol kept snug against the
+   number via a JS-set width on the inner input (see app.js sizeInput). */
+.amt{width:130px;background:#0b0c0e;border:1px solid #3b4450;border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:flex-end;gap:4px;-webkit-tap-highlight-color:transparent}
+.amt:focus-within{border-color:#a4fd31}
+.sym{color:#fff;font-size:16px;line-height:1;flex:none;-webkit-user-select:none;user-select:none}
+.amt input{width:1ch;flex:none;min-width:0;background:transparent;border:0;padding:0;border-radius:0}
+.amt input:focus{border-color:transparent}
 button{width:100%;margin-top:14px;background:#a4fd31;color:#071000;border:0;border-radius:14px;padding:15px;font-weight:900;-webkit-appearance:none;appearance:none;touch-action:manipulation;cursor:pointer}
 button:disabled{opacity:.7}
 .status{text-align:center;padding:12px;margin-top:13px;color:#aab2bf;font-size:11px}

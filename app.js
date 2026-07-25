@@ -18,6 +18,26 @@
   var state = document.getElementById("state");
   var timeEl = document.getElementById("time");
 
+  // --- currency-input UX (caret always at end, fixed symbol, clear-on-first-backspace) --
+  // Only USD/EUR/TRY show a fixed symbol prefix (wrapped in .amt in the HTML);
+  // USDT/TRX inputs are untouched plain inputs, same as before.
+  var SYM = { USD: "$", EUR: "€", TRY: "₺" };
+  var freshFocus = {};
+
+  function caretToEnd(x) {
+    var el = E[x];
+    var end = el.value.length;
+    try { el.setSelectionRange(end, end); } catch (e) { /* not all input states support this */ }
+  }
+
+  // Keeps the symbol snug against the number (no leftover browser default
+  // input width) without altering the outer box size/position at all.
+  function sizeInput(x) {
+    if (!SYM[x]) return;
+    var el = E[x];
+    el.style.width = Math.max(1, el.value.length) + "ch";
+  }
+
   // --- helpers -------------------------------------------------------
   // Fix: replace ALL commas (was only the first one) so decimal parsing
   // never silently drops a stray comma; normal single-comma Turkish input
@@ -69,13 +89,41 @@
     };
     U.forEach(function (x) {
       if (x !== active) E[x].value = o[x].toFixed(x === "TRX" ? 4 : 2);
+      sizeInput(x);
     });
   }
   function paint() { calc(); }
 
   U.forEach(function (x) {
-    E[x].onfocus = function () { active = x; };
-    E[x].oninput = function () { active = x; calc(); };
+    var el = E[x];
+    el.onfocus = function () {
+      active = x;
+      freshFocus[x] = true;
+      // Runs after the browser's own focus/selection handling settles.
+      setTimeout(function () { caretToEnd(x); }, 0);
+    };
+    el.oninput = function () {
+      active = x;
+      calc();
+      setTimeout(function () { caretToEnd(x); }, 0);
+    };
+    el.addEventListener("click", function () {
+      setTimeout(function () { caretToEnd(x); }, 0);
+    });
+    // beforeinput (not keydown) so this works reliably with virtual/mobile
+    // keyboards too. First Backspace/Delete right after focusing clears the
+    // whole value in one press; afterwards, deletion behaves normally.
+    el.addEventListener("beforeinput", function (e) {
+      var wasFresh = freshFocus[x];
+      freshFocus[x] = false;
+      if (wasFresh && (e.inputType === "deleteContentBackward" || e.inputType === "deleteContentForward")) {
+        e.preventDefault();
+        el.value = "";
+        active = x;
+        calc();
+      }
+    });
+    sizeInput(x);
   });
 
   // --- networking ------------------------------------------------------
