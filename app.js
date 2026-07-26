@@ -46,13 +46,6 @@
     return parseFloat(String(v).replace(/,/g, "."));
   }
 
-  function f(v, d) {
-    return new Intl.NumberFormat("tr-TR", {
-      minimumFractionDigits: d == null ? 2 : d,
-      maximumFractionDigits: d == null ? 2 : d
-    }).format(v);
-  }
-
   // Safari private-browsing (and some locked-down webviews) can throw on
   // localStorage access. Wrap so a storage error never breaks the app.
   function loadCache() {
