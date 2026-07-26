@@ -192,13 +192,19 @@
 
   var isUpdating = false;
   var lastAttempt = 0;
+  var textResetTimer = null;
 
   async function update() {
     if (isUpdating) return; // guards against overlapping timer/manual/reconnect refreshes
     isUpdating = true;
     lastAttempt = Date.now();
+    if (textResetTimer) {
+      clearTimeout(textResetTimer);
+      textResetTimer = null;
+    }
     refresh.disabled = true;
     refresh.textContent = "GÜNCELLENİYOR…";
+    var success = false;
     try {
       // FX and crypto are independent, so fetch them in parallel (was
       // sequential before) — same requirement that BOTH must succeed,
@@ -211,6 +217,7 @@
       dot.className = "dot ok";
       state.textContent = "CANLI VERİ • " + crypto.source;
       timeEl.textContent = "Son güncelleme: " + new Date().toLocaleString("tr-TR");
+      success = true;
     } catch (e) {
       var c = loadCache();
       if (c) {
@@ -224,8 +231,18 @@
       dot.className = "dot err";
     } finally {
       refresh.disabled = false;
-      refresh.textContent = "KURLARI YENİLE";
       isUpdating = false;
+      if (success) {
+        // Brief confirmation so the user sees the button acknowledge the
+        // refresh, instead of jumping straight back to "KURLARI YENİLE".
+        refresh.textContent = "YENİLENDİ";
+        textResetTimer = setTimeout(function () {
+          refresh.textContent = "KURLARI YENİLE";
+          textResetTimer = null;
+        }, 1500);
+      } else {
+        refresh.textContent = "KURLARI YENİLE";
+      }
     }
   }
 
